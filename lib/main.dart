@@ -1,56 +1,54 @@
+import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 void main() => runApp(MaterialApp(home: MyApp()));
 
 class MyApp extends StatelessWidget{
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      //Remove App Bar for fullscreen look
-//      appBar: AppBar(
-//        title: Text('Star Stories')
-//      ),
-      body: ListView.builder(
-        padding: EdgeInsets.symmetric(vertical:16.0),
-        itemBuilder: (BuildContext context, int index) {
-          if (index % 2 == 0) {
-            return _buildCarousel(context, index ~/ 2);
-          }
-          else {
-            return Divider();
-          }
-        }
-      ),
+    SystemChrome.setEnabledSystemUIOverlays([]);
+    return MaterialApp(
+      home: HomePage(),
     );
   }
+}
 
-  Widget _buildCarousel(BuildContext context, int carouselIndex) {
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      children: <Widget>[
-        Text('Carousel $carouselIndex'),
-        SizedBox(
-          height: 200.0,
-          child: PageView.builder(
-            controller: PageController(viewportFraction: 0.8),
-            itemBuilder: (BuildContext context, int itemIndex) {
-              return _buildCarouselItem(context, carouselIndex, itemIndex);
-            }
-          ),
-        )
-      ],
+class HomePage extends StatelessWidget{
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold (
+      body: ImageCarousel(),
+      backgroundColor: Colors.black87,
     );
   }
+}
 
-  Widget _buildCarouselItem(BuildContext context, int carouselIndex, int itemIndex) {
-    return Padding(
-      padding: EdgeInsets.symmetric(horizontal: 4.0),
-      child: Container(
-        decoration: BoxDecoration(
-          color: Colors.grey,
-          borderRadius: BorderRadius.all(Radius.circular(4.0)),
-        ),
-      ),
+class ImageCarousel extends StatelessWidget{
+  @override
+  Widget build(BuildContext context) {
+    return CarouselSlider(
+        height: MediaQuery.of(context).size.height,
+        items: [1,2,3,4,5].map((i) {
+        return Builder(
+          builder: (BuildContext context) {
+            return Container(
+                width: MediaQuery.of(context).size.width,
+                margin: EdgeInsets.symmetric(vertical: 75.0, horizontal: 10.0),
+                decoration: BoxDecoration(
+                    color: Colors.deepPurple,
+                    gradient: new LinearGradient(
+                      colors: [Color(0xFF631170), Color(0xFF5043C5)],
+                        begin: Alignment.bottomLeft,
+                        end: new Alignment(0, -1)
+                    ),
+                    borderRadius: new BorderRadius.all(new Radius.circular(20.0))
+                ),
+                child: Text('text $i', style: TextStyle(fontSize: 16.0),)
+            );
+          },
+        );
+      }).toList(),
     );
   }
 }
